@@ -1,0 +1,105 @@
+<div class="row mt-5 mb-5">
+    <h3>Create a new task</h3>
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+            <label for="exampleInputTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" id="exampleInputTitle" aria-describedby="TitleHelp"
+                formControlName="title">
+            <div *ngIf="taskForm.controls['title'].invalid && (taskForm.controls['title'].dirty || taskForm.controls['title'].touched)"
+                class="text-danger">
+                Please enter Title
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputDescription" class="form-label">Description</label>
+            <input type="text" class="form-control" id="exampleInputDescription" formControlName="description">
+
+        </div>
+        <div class="mb-5">
+            <label for="exampleInputStatus" class="form-label">Status</label>
+            <select class="form-select" aria-label="Default select example" formControlName="status">
+                <option value="null" disabled selected>Select your option</option>
+                <option value="To Do">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+            </select>
+            <div *ngIf="taskForm.controls['status'].invalid && (taskForm.controls['status'].dirty || taskForm.controls['status'].touched)"
+                class="text-danger">
+                Please select a status
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary" [disabled]="!taskForm.valid">Submit</button>
+            <button type='button' class="btn btn-warning" (click)="resetForm()">Clear</button>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <h3>Task List</h3>
+</div>
+<div class="row">
+    <div class="col-12 mb-3">
+        <div class="col-3 float-end">
+            <label for="exampleInputStatus" class="form-label">Status</label>
+            <select class="form-select" aria-label="Default select example"  [(ngModel)]="filter" (change)="filterChanged()">
+                <option value="null">All</option>
+                <option value="To Do">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+            </select>    
+        </div>
+    </div>
+    
+
+    <table class="table table-bordered table-sm table-dark table-hover ">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of gridlist">
+                <td>{{item.title}}</td>
+                <td>{{item.description}}</td>
+                <td>{{item.status}}</td>
+                <td class="text-center"><i class="bi bi-pencil-square" (click)="editTaskOpen(item)"></i><i class="bi bi-trash3" (click)="deleteTask(item.id)"></i></td>
+            </tr>
+            <tr *ngIf="gridlist.length == 0">
+                <td colspan="4" class="text-center">No data found</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update Status</h1>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="editForm" >
+                <label for="">New Status of Task:</label>
+                <select class="form-select" aria-label="Default select example" formControlName="status">
+                    <option value="To Do">To Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                </select>
+            </form>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!editForm.valid" (click)="editTaskSubmit()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
