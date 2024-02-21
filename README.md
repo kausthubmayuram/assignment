@@ -1,5 +1,5 @@
 
-# The Project Name
+# Task Management
 
 Basic Task Management application with CRUD Operations for Pesto Assignment
 
